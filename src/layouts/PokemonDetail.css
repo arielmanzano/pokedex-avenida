@@ -1,14 +1,28 @@
-.title {
-    font-family: "Flexo-Medium",arial,sans-serif;
-    color: #212121;
-    float: left;
-    font-size: 225%;
-    margin-top: 0.5em;
-    text-align: center;
-    width: 100%;
-    word-break: break-word;
+.rotate-arrow {
+  transform: rotateZ(90deg);
 }
 
-.rotate-arrow {
-    transform: rotateZ(90deg);
-  }
+.container-detail {
+  width: 85%;
+  height: auto;
+  margin-left: 7.5%;
+  background-color: #fafafa;
+  align-items: center;
+}
+
+.image-responsive {
+  width: 100%;
+  height: auto;
+}
+
+.overview-container {
+  background-color: #30a7d7;
+  border-radius: 10;
+  color: #fff;
+  height: fit-content;
+}
+
+.evolution-container {
+  background-color: #616161;
+  border-radius: 10;
+}

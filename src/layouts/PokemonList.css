@@ -1,3 +1,11 @@
+.container-list {
+    width: 85%;
+    height: auto;
+    margin-left: 7.5%;
+    background-color: #fafafa;
+    align-items: center;
+}
+
 .label { 
     text-align: center;
     border-radius: 4px;
@@ -73,6 +81,41 @@
 
 .psychic {
     background-color: #f366b9;
+    color: #fff;
+}
+
+.dragon {
+    background: -webkit-linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    background: -ms-linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    background: -moz-linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    background: -o-linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    background: linear-gradient(180deg, #53a4cf 50%, #f16e57 50%);
+    background-color: #53a4cf;
+    color: #fff;
+}
+
+.ghost {
+    background-color: #7b62a3;
+    color: #fff;
+}
+
+.steel {
+    background-color: #9eb7b8;
+    color: #212121;
+}
+
+.dark {
+    background-color: #707070;
+    color: #fff;
+}
+
+.ice {
+    background-color: #51c4e7;
+    color: #212121;
+}
+
+.rock {
+    background-color: #a38c21;
     color: #fff;
 }
 

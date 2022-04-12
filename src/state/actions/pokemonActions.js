@@ -1,10 +1,11 @@
 import axios from '../../api';
-import { FETCH_POKEMON_REJECT, FETCH_POKEMON_FULFILL, IS_PENDING, GET_POKEMON } from '../constanst';
+import _ from 'lodash';
+import { FETCH_POKEMON_REJECT, FETCH_POKEMON_FULFILL, IS_PENDING, GET_POKEMON_FULFILL, GET_POKEMON_REJECT } from '../constanst';
 
-export const fetchPokemons = () => async (dispatch) => {
+export const fetchPokemons = (paramaters) => async (dispatch) => {
 	try {
 		dispatch({ type: IS_PENDING });
-		const pokemons = await axios.get('/api/v2/pokemon');
+		const pokemons = await axios.get(`/api/v2/pokemon?${paramaters}`);
 		const promises = pokemons.data.results.map((pokemon) => axios.get(`/api/v2/pokemon/${pokemon.name}`));
 
 		const result = await Promise.all(promises);
@@ -16,7 +17,7 @@ export const fetchPokemons = () => async (dispatch) => {
 	catch(e) {
 		dispatch({
 			type: FETCH_POKEMON_REJECT,
-			payload: 'Ha ocurrido un problema al cargar los pokemons.',
+			payload: 'There was a problem loading the pokemons.',
 		});
 	}
 }
@@ -33,10 +34,14 @@ export const getPokemon = (id) => async (dispatch) => {
 		allPokemons = [];
 		pokemon.data.evolution = await _parseEvolutionChain(evolutionChain.chain);
 		dispatch({
-			type: GET_POKEMON,
+			type: GET_POKEMON_FULFILL,
 			payload: pokemon.data,
 		});
 	} catch(e) {
+		dispatch({
+			type: GET_POKEMON_REJECT,
+			payload: 'There was a problem loading the Pokemon detail.',
+		});
 	}
 }
 
@@ -50,6 +55,5 @@ const _parseEvolutionChain = async (evolutionChain) => {
 
 	const pokemon = (await axios.get(`/api/v2/pokemon/${evolutionChain.species.name}`)).data;
 	allPokemons.unshift(pokemon);
-	return allPokemons;
-
+	return _.uniqBy(allPokemons, 'id');
 }

@@ -1,0 +1,15 @@
+.title,
+.subtitle {
+  font-family: 'Flexo-Medium', arial, sans-serif;
+  color: #212121;
+  float: left;
+  font-size: 225%;
+  margin-top: 0.5em;
+  text-align: center;
+  width: 100%;
+  word-break: break-word;
+}
+
+.subtitle {
+  font-size: 175%;
+}
