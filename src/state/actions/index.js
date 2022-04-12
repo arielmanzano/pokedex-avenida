@@ -1,7 +1,9 @@
 import {
-    fetchPokemons
+    fetchPokemons,
+    getPokemon
 } from './pokemonActions';
 
 export {
-    fetchPokemons
+    fetchPokemons,
+    getPokemon
 }

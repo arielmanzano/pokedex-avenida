@@ -1,40 +1,78 @@
-import { useSelector } from "react-redux";
-import { Grid , Card, CardActionArea, CardContent, CardMedia, Typography} from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from "react-router-dom";
+import { Grid , Card, CardContent, CardMedia, Typography} from '@material-ui/core';
+
+import { fetchPokemons } from '../state/actions';
+
+import './PokemonList.css';
+import { Spinner } from '../components/Spinner';
 
 
-export const PokemonList = () => {
+const PokemonList = () => {
+    
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+      dispatch(fetchPokemons());
+    }, [dispatch])
+
     const { isLoading, fetchErrorMessage, entities } = useSelector(
         (state) => state.pokemons
     );
 
-    const getId = ({ id }) => {
+    const parseId = (id) => {
         if(id > 99) return `${id}`;
         if(id < 99 && id > 9) return `0${id}`;
         if(id <= 9) return `00${id}`;
     }
 
+    function toTitleCase(str) {
+      return str.replace(
+        /\w\S*/g,
+        function(txt) {
+          return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+      );
+    }
+
     return (
-      <Grid container style={{ width: '100%' }} spacing={1}>
-        {entities.map((pokemon) => {
-          console.log(pokemon)
-          return (
-            <Grid container item xs={12} spacing={3}>
-              <Card>
-                <CardActionArea>
-                  <img src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${getId(pokemon)}.png`} alt='' />
+      <>
+       { isLoading ? 
+          <Spinner /> :
+          <Grid container spacing={1}>
+          {entities.map((pokemon) => {
+            return (
+              <Grid item xs={12} sm={6} md={3} spacing={2}>
+                <Card>
+                  <Link to={`/pokedex/${pokemon.id}`}>
+                    <CardMedia component='img' width='100%' height='auto' src={`https://assets.pokemon.com/assets/cms2/img/pokedex/full/${parseId(pokemon.id)}.png`} alt={`${pokemon.name}`} />
+                  </Link>
                   <CardContent>
+                    <Typography gutterBottom className='id' variant='body2' component='p'>
+                      #{parseId(pokemon.id)}
+                    </Typography>
                     <Typography gutterBottom variant='h5' component='h2'>
-                      {pokemon.name}
+                      {toTitleCase(pokemon.name)}
                     </Typography>
-                    <Typography variant='body2' color='textSecondary' component='p'>
-                      Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
-                    </Typography>
+                    <Grid container>
+                      {pokemon.types.map((e) => {
+                        return (
+                          <Grid xs={4} className={`label ${e.type.name}`}>
+                            {toTitleCase(e.type.name)}
+                          </Grid>
+                        )
+                      })}
+                    </Grid>
                   </CardContent>
-                </CardActionArea>
-              </Card>
-            </Grid>
-          )
-        })}
-      </Grid>
+                </Card>
+              </Grid>
+            )
+          })}
+        </Grid>}
+      </>
+      
     )
 };
+
+export default PokemonList;

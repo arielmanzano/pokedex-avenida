@@ -1,19 +1,16 @@
 import { Routes, Route } from "react-router-dom";
 import './App.css'
-import { PokemonListRoute } from "./routes/PokemonList";
+import PokemonList from "./layouts/PokemonList";
+import PokemonDetail from "./layouts/PokemonDetail";
 
 function App() {
   return (
     <Routes>
         {/* <Route exact path="/" children={<LoginRoute />} /> */}
-        <Route exact path="/pokedex" element={<PokemonListRoute/>}>
-          {/* <NavBar />
-          <CourseListRoute /> */}
-        </Route>
-        <Route exact path="/pokedex/:id">
-          {/* <NavBar />
-          <CourseDetailRoute /> */}
-        </Route>
+        {/* <Redirect from="/" to="/pokedex" /> */}
+        <Route exact path="/" />
+        <Route exact path="/pokedex" element={<PokemonList/>} />
+        <Route exact path="/pokedex/:id" element={<PokemonDetail/>} />
       </Routes>
   )
 }

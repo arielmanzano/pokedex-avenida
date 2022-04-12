@@ -1,22 +1,55 @@
 import axios from '../../api';
-import { POKEMON_REJECT, POKEMON_FULFILL, POKEMON_PENDING } from '../constanst';
+import { FETCH_POKEMON_REJECT, FETCH_POKEMON_FULFILL, IS_PENDING, GET_POKEMON } from '../constanst';
 
 export const fetchPokemons = () => async (dispatch) => {
 	try {
-		dispatch({ type: POKEMON_PENDING })
+		dispatch({ type: IS_PENDING });
 		const pokemons = await axios.get('/api/v2/pokemon');
 		const promises = pokemons.data.results.map((pokemon) => axios.get(`/api/v2/pokemon/${pokemon.name}`));
 
 		const result = await Promise.all(promises);
 		dispatch({
-			type: POKEMON_FULFILL,
+			type: FETCH_POKEMON_FULFILL,
 			payload: result.map((r) => r.data ),
 		});
 	}
 	catch(e) {
 		dispatch({
-			type: POKEMON_REJECT,
+			type: FETCH_POKEMON_REJECT,
 			payload: 'Ha ocurrido un problema al cargar los pokemons.',
 		});
 	}
+}
+
+let allPokemons;
+export const getPokemon = (id) => async (dispatch) => {
+	try {
+		dispatch({ type: IS_PENDING });
+		const pokemon = await axios.get(`/api/v2/pokemon/${id}`)
+		pokemon.data.specie = (await axios.get(`/api/v2/pokemon-species/${id}`)).data
+		const evolutionId = pokemon.data.specie.evolution_chain.url.split('/').slice(-2, -1);
+		const evolutionChain = (await axios.get(`/api/v2/evolution-chain/${evolutionId}`)).data
+
+		allPokemons = [];
+		pokemon.data.evolution = await _parseEvolutionChain(evolutionChain.chain);
+		dispatch({
+			type: GET_POKEMON,
+			payload: pokemon.data,
+		});
+	} catch(e) {
+	}
+}
+
+const _parseEvolutionChain = async (evolutionChain) => {
+	if(evolutionChain.evolves_to.length > 0) {
+		const pokemonsProm = evolutionChain.evolves_to.map((e) => {
+			return _parseEvolutionChain(e);
+		});
+		await Promise.all(pokemonsProm);
+	}
+
+	const pokemon = (await axios.get(`/api/v2/pokemon/${evolutionChain.species.name}`)).data;
+	allPokemons.unshift(pokemon);
+	return allPokemons;
+
 }
