@@ -13,33 +13,31 @@ import { ErrorMessageAlert } from '../components/ErrorMessageAlert'
 
 const PokemonList = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate();
-  const [name, setName] = React.useState('');
+  const navigate = useNavigate()
+  const [name, setName] = React.useState('')
   const handleChange = (event) => {
-    setName(event.target.value);
-  };
+    setName(event.target.value)
+  }
 
   useEffect(() => {
     dispatch(fetchPokemons('limit=20&offset=0'))
   }, [dispatch])
 
   const search = () => {
-    navigate(`/pokedex/${name.toLowerCase()}`);
+    navigate(`/pokedex/${name.toLowerCase()}`)
   }
 
   const { isLoading, errorMessage, entities } = useSelector((state) => state.pokemons)
 
   const handleKeyPress = (event) => {
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       search()
     }
   }
 
   return (
     <div className='container-list'>
-      {errorMessage && (
-          <ErrorMessageAlert message={errorMessage} />
-        )}
+      {errorMessage && <ErrorMessageAlert message={errorMessage} />}
       {isLoading ? (
         <Spinner />
       ) : (
@@ -54,16 +52,16 @@ const PokemonList = () => {
             </span>
           </h1>
 
-          <div>
-          <TextField label="Search Pokemon by ID or Name" value={name} onChange={handleChange}  onKeyPress={handleKeyPress} style={{width: '25%'}}/>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#ee6b2f', color: '#fff' }}
-            onClick={search}
-          >
-            Search
-          </Button>
-          </div>
+          <Grid container alignItems='center'>
+            <Grid xs={9} md={4}>
+              <TextField label='Search Pokemon by ID or Name' value={name} onChange={handleChange} onKeyPress={handleKeyPress} style={{ width: '100%' }} />
+            </Grid>
+            <Grid xs={3}>
+              <Button variant='contained' style={{ backgroundColor: '#ee6b2f', color: '#fff' }} onClick={search}>
+                Search
+              </Button>
+            </Grid>
+          </Grid>
 
           <Grid container spacing={1}>
             {entities.map((pokemon) => {
