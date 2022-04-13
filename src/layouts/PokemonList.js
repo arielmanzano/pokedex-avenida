@@ -52,7 +52,7 @@ const PokemonList = () => {
             </span>
           </h1>
 
-          <Grid container alignItems='center'>
+          <Grid container alignItems='center' style={{ margin: '0.75em' }} >
             <Grid xs={9} md={4}>
               <TextField label='Search Pokemon by ID or Name' value={name} onChange={handleChange} onKeyPress={handleKeyPress} style={{ width: '100%' }} />
             </Grid>
